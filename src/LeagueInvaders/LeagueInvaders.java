@@ -6,9 +6,10 @@ import javax.swing.JPanel;
 public class LeagueInvaders {
 	JFrame frame;
 	GamePanel gprun;
+	static final int WIDTH = 500;
+	static final int HEIGHT = 800;
 public static void main(String[] args) {
-	final int x = 500;
-	final int y = 800;
+	
 	LeagueInvaders toRun = new LeagueInvaders();
 	
 	toRun.setup();
@@ -18,9 +19,12 @@ public LeagueInvaders(){
 	gprun = new GamePanel();
 }
 public void setup(){
+	frame.setSize(WIDTH, HEIGHT);
 	frame.add(gprun);
+	frame.addKeyListener(gprun);
 	frame.setVisible(true);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	gprun.startGame();
 }
+
 }
