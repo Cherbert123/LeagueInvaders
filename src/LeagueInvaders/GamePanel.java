@@ -7,7 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -22,7 +25,9 @@ Font titleFont;
 Font subtitleFont;
 Rocketship rocket = new Rocketship(250,700,50,50);
 ObjectManager om = new ObjectManager();
-
+public static BufferedImage alienImg;
+public static BufferedImage rocketImg;
+public static BufferedImage bulletImg;
 
 public GamePanel(){
 	framerate = new Timer(1000/60, this);
@@ -30,7 +35,15 @@ public GamePanel(){
 	titleFont = new Font("Arial",Font.PLAIN,48);
 	subtitleFont = new Font("Arial",Font.PLAIN,24);
 	om.addObject(rocket);
-	
+	try {
+		alienImg = ImageIO.read(this.getClass().getResourceAsStream("alien.png"));
+		rocketImg = ImageIO.read(this.getClass().getResourceAsStream("rocket.png"));
+		bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
 }
 
 public void actionPerformed(ActionEvent e) {
@@ -93,6 +106,10 @@ public void keyPressed(KeyEvent e) {
 	rocket.down = true;
 	rocket.update();
 	}
+	if(e.getKeyCode() == 32){
+		om.addObject(new Projectile(rocket.x + 20 , rocket.y, 10, 10));
+
+	}
 	
 	}
 
@@ -121,7 +138,15 @@ public void updateMenuState(){
 }
 public void updateGameState(){
 om.update();
-	
+om.manageEnemies();
+om.checkCollision();
+om.getScore();
+	if(rocket.isAlive == false){
+		currentState = END_STATE;
+		om.reset();
+		rocket = new Rocketship(250,700,50,50);
+		om.addObject(rocket);
+	}
 }
 public void updateEndState(){
 	
@@ -141,10 +166,10 @@ public void drawGameState(Graphics g){
 	om.draw(g);
 }
 public void drawEndState(Graphics g){
-	g.setColor(Color.RED);
+	g.setColor(Color.BLACK);
 	g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT); 
 	g.setFont(titleFont);
-	g.setColor(Color.BLACK);
+	g.setColor(Color.WHITE);
 	g.drawString("Game Over", 75, 350);
 	g.setFont(subtitleFont);
 	g.drawString("(press enter to restart)", 75, 400);
