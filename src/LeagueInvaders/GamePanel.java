@@ -28,6 +28,7 @@ ObjectManager om = new ObjectManager();
 public static BufferedImage alienImg;
 public static BufferedImage rocketImg;
 public static BufferedImage bulletImg;
+String leagueInvadersT;
 
 public GamePanel(){
 	framerate = new Timer(1000/60, this);
@@ -139,6 +140,8 @@ public void updateMenuState(){
 public void updateGameState(){
 om.update();
 om.manageEnemies();
+om.randomizeE();
+om.enemyTimer = om.enemyTimer - om.getScore() * 2;
 om.checkCollision();
 om.getScore();
 	if(rocket.isAlive == false){
@@ -152,13 +155,15 @@ public void updateEndState(){
 	
 }
 public void drawMenuState(Graphics g){
+	leagueInvadersT = "League Invaders";
 	g.setColor(Color.ORANGE);
 	g.fillRect(0, 0, LeagueInvaders.WIDTH, LeagueInvaders.HEIGHT);
 	g.setFont(titleFont);
 	g.setColor(Color.WHITE);
-	g.drawString("League Invaders", 75, 350);
+	g.drawString(leagueInvadersT, 75, 350);
 	g.setFont(subtitleFont);
 	g.drawString("(press enter to begin)", 125, 400);
+	om.setScore(0);
 }
 public void drawGameState(Graphics g){
 	g.setColor(Color.BLACK);

@@ -7,7 +7,9 @@ import java.util.Random;
 
 public class ObjectManager {
 	ArrayList<GameObject> objects;
-	
+	String enemyP = "0000110000";
+	int enemyPCharToInt;
+	int  enemyPL = 0;
 	private int score = 0;
 	
 	long enemyTimer = 0;
@@ -47,11 +49,52 @@ public class ObjectManager {
 
 	public void manageEnemies(){
 		if(System.currentTimeMillis() - enemyTimer >= enemySpawnTime){
-			addObject(new Alien(new Random().nextInt(LeagueInvaders.WIDTH), 0, 50, 50));
+			for(int i = 0; i < 10;i++){
+				enemyPL = enemyP.substring(0, i).length();
+
+				if(enemyP.charAt(i) == '1'){
+					addObject(new Alien(enemyPL * 50, 0, 50, 50));
+				}
+				
+			}
+			
+			
 			enemyTimer = System.currentTimeMillis();
 		}
 	}
-
+	public void randomizeE(){
+		Random random = new Random();
+		int rand = random.nextInt(10);
+		if(rand == 1){
+			enemyP = "1111111111";
+		}else if(rand == 2){
+			enemyP = "0001111000";	
+		
+		}else if(rand == 3){
+			enemyP = "0000110000";
+		
+		}else if(rand == 4){
+			enemyP = "1100000011";
+		
+		}else if(rand == 5){
+			enemyP = "1000100011";
+		
+		}else if(rand == 6){
+			enemyP = "0000011111";
+		
+		}else if(rand == 7){
+			enemyP = "1111100000";
+		
+		}else if(rand == 8){
+			enemyP = "1110000000";
+		
+		}else if(rand == 9){
+			enemyP = "0000000111";
+		
+		}else if(rand == 0){
+			enemyP = "1111001111";
+		}
+		}
 	public void checkCollision() {
 		for (int i = 0; i < objects.size(); i++) {
 			for (int j = i + 1; j < objects.size(); j++) {
